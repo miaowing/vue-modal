@@ -3,16 +3,21 @@
  */
 (function () {
     function install(Vue) {
+        function extend(target, source) {
+            for (var p in source) {
+                if (source.hasOwnProperty(p)) {
+                    target[p] = source[p];
+                }
+            }
+            return target;
+        }
+
         Vue.modal = function (config) {
             var vm = null;
             var defaultConfig = {
                 target: document.body,
                 data: {
-                    show: false,
-                    modal: {
-                        title: 'default title',
-                        content: 'default body'
-                    }
+                    show: false
                 },
                 template: '',
                 autoDestroy: false
@@ -26,27 +31,18 @@
                 data: config.data
             });
 
+            //insert into target element
             var divEl = document.createElement('div');
             divEl.innerHTML = config.template;
-
             vm.$mount(divEl);
-
             vm.$appendTo(config.target);
+
 
             vm.config = config;
             vm.open = open;
             vm.close = close;
             vm.destroy = destroy;
             vm.update = update;
-
-            function extend(target, source) {
-                for (var p in source) {
-                    if (source.hasOwnProperty(p)) {
-                        target[p] = source[p];
-                    }
-                }
-                return target;
-            }
 
             /**
              * open the modal
