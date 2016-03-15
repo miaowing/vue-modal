@@ -3,12 +3,12 @@
 ####init modal
 ```javascript
 var vm = Vue.modal({
-  target: element
-  template: '<div>test</div>',
+  target: element // insert modal element into target element which is child element of target element.
+  template: template, // vue-modal template, type string.
   data: {
-      
+
   },
-  autoDestroy: false
+  autoDestroy: false // when the value is true, you won't need to invoke destroy().
 });
 ```
 
@@ -30,6 +30,6 @@ vm.destroy();
 ####update
 ```javascript
 vm.udpate({
-  
+  // data
 })
 ```

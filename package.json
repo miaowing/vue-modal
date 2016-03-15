@@ -1,6 +1,6 @@
 {
   "name": "vue-modal",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "a plugin for vuejs",
   "main": "index.js",
   "scripts": {
