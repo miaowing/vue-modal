@@ -1,6 +1,10 @@
 # vue-modal plugin
+#### Usage
+```
+npm install vue-modal-plugin --save
+```
 
-####init modal
+#### init modal
 ```javascript
 var vm = Vue.modal({
   target: element // insert modal element into target element which is child element of target element.
@@ -12,12 +16,12 @@ var vm = Vue.modal({
 });
 ```
 
-####open
+#### open
 ```javascript
 vm.open();
 ```
 
-####close
+#### close
 ```javascript
 vm.close();
 ```
@@ -27,7 +31,7 @@ vm.close();
 vm.destroy();
 ```
 
-####update
+#### update
 ```javascript
 vm.udpate({
   // data
