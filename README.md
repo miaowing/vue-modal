@@ -1,4 +1,4 @@
-# vue-modal plugin
+# vue-modal-plugin
 #### Usage
 ```
 npm install vue-modal-plugin --save
@@ -6,6 +6,11 @@ npm install vue-modal-plugin --save
 
 #### init modal
 ```javascript
+var Vue = require('vue'),
+    VueModal = require('vue-modal-plugin');
+    
+Vue.use(VueModal);
+
 var vm = Vue.modal({
   target: element // insert modal element into target element which is child element of target element.
   template: template, // vue-modal template, type string.
