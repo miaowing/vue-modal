@@ -58,24 +58,40 @@
 	    VueModal = __webpack_require__(4),
 	    modalTemplate = __webpack_require__(6);
 
+	//regist vue-modal plugin
 	Vue.use(VueModal);
-	var app = new Vue({
-	    el: '#app',
-	    methods: {
-	        open: function () {
-	            vm.open();
-	        }
-	    }
-	});
-	var vm = Vue.modal({
+
+	//initial vue-modal
+	var modal = Vue.modal({
 	    template: modalTemplate,
 	    data: {
 	        modal: {
 	            title: 'this is modal title',
 	            content: 'this is modal content'
 	        }
+	    },
+	    methods: {
+	        updateData: function () {
+	            this.modal = {
+	                title: 'update title.',
+	                content: 'update content.'
+	            };
+	        }
 	    }
 	});
+
+	var app = new Vue({
+	    el: '#app',
+	    methods: {
+	        open: function () {
+	            modal.open();
+	        },
+	        confirm: function () {
+	            modal.close();
+	        }
+	    }
+	});
+
 
 /***/ },
 /* 2 */
@@ -9896,22 +9912,32 @@
 	        }
 
 	        Vue.modal = function (config) {
-	            var vm = null;
+	            var modal = {};
 	            var defaultConfig = {
 	                target: document.body,
 	                data: {
 	                    show: false
 	                },
+	                methods: {},
 	                template: '',
 	                autoDestroy: false
 	            };
 
 	            config = extend(defaultConfig, config);
-	            config.data.show = false;
 
-	            vm = new Vue({
+	            // default config
+	            config.data.show = false;
+	            config.methods.close = function() {
+	                this.show = false;
+	                if (defaultConfig.autoDestroy) {
+	                    setTimeout(destroy, 300);
+	                }
+	            };
+
+	            var vm = new Vue({
 	                replace: true,
-	                data: config.data
+	                data: config.data,
+	                methods: config.methods
 	            });
 
 	            //insert into target element
@@ -9921,11 +9947,12 @@
 	            vm.$appendTo(config.target);
 
 
-	            vm.config = config;
-	            vm.open = open;
-	            vm.close = close;
-	            vm.destroy = destroy;
-	            vm.update = update;
+	            modal.vm = vm;
+	            modal.config = config;
+	            modal.open = open;
+	            modal.close = close;
+	            modal.destroy = destroy;
+	            modal.update = update;
 
 	            /**
 	             * open the modal
@@ -9939,7 +9966,7 @@
 	             */
 	            function close() {
 	                vm.show = false;
-	                if (vm.config.autoDestroy) {
+	                if (modal.config.autoDestroy) {
 	                    setTimeout(destroy, 300);
 	                }
 	            }
@@ -9962,10 +9989,12 @@
 	             * @param data
 	             */
 	            function update(data) {
-	                extend(vm, data);
+	                for(key in data) {
+	                    vm[key] = data[key];
+	                }
 	            }
 
-	            return vm;
+	            return modal;
 	        }
 	    }
 
@@ -9985,7 +10014,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"modal-mask\" v-show=\"show\" transition=\"bg\" xmlns:v-on=\"http://www.w3.org/1999/xhtml\">\n    <div class=\"modal-wrapper\">\n        <div v-show=\"show\" transition=\"modal\" class=\"transition-wrapper\">\n            <div class=\"modal-container\">\n                <content select=\".modal-header\">\n                    <div class=\"modal-header\">\n                        {{modal.title}}<span v-on:click=\"close()\"></span>\n                    </div>\n                </content>\n                <content select=\".modal-body\">\n                    <div class=\"modal-body\">\n                        <div class=\"form-group\">\n                            <div class=\"items notify-warn\">\n                                <p>{{modal.content}}</p>\n                            </div>\n                        </div>\n                    </div>\n                </content>\n                <content select=\".modal-footer\">\n                    <div class=\"modal-footer\">\n                        <button class=\"modal-button modal-cancel-button\" v-on:click=\"close()\">确定</button>\n                    </div>\n                </content>\n            </div>\n        </div>\n    </div>\n</div>";
+	module.exports = "<div class=\"modal-mask\" v-show=\"show\" transition=\"bg\" xmlns:v-on=\"http://www.w3.org/1999/xhtml\">\n    <div class=\"modal-wrapper\">\n        <div v-show=\"show\" transition=\"modal\" class=\"transition-wrapper\">\n            <div class=\"modal-container\">\n                <content select=\".modal-header\">\n                    <div class=\"modal-header\">\n                        {{modal.title}}<span v-on:click=\"close()\"></span>\n                    </div>\n                </content>\n                <content select=\".modal-body\">\n                    <div class=\"modal-body\">\n                        <div class=\"form-group\">\n                            <div class=\"items notify-warn\">\n                                <p>{{modal.content}}</p>\n                            </div>\n                        </div>\n                    </div>\n                </content>\n                <content select=\".modal-footer\">\n                    <div class=\"modal-footer\">\n                        <button class=\"modal-button modal-cancel-button\" v-on:click=\"updateData()\">更新</button>\n                        <button class=\"modal-button modal-cancel-button\" v-on:click=\"close()\">确定</button>\n                    </div>\n                </content>\n            </div>\n        </div>\n    </div>\n</div>";
 
 /***/ }
 /******/ ]);

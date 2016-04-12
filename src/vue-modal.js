@@ -13,22 +13,32 @@
         }
 
         Vue.modal = function (config) {
-            var vm = null;
+            var modal = {};
             var defaultConfig = {
                 target: document.body,
                 data: {
                     show: false
                 },
+                methods: {},
                 template: '',
                 autoDestroy: false
             };
 
             config = extend(defaultConfig, config);
-            config.data.show = false;
 
-            vm = new Vue({
+            // default config
+            config.data.show = false;
+            config.methods.close = function() {
+                this.show = false;
+                if (defaultConfig.autoDestroy) {
+                    setTimeout(destroy, 300);
+                }
+            };
+
+            var vm = new Vue({
                 replace: true,
-                data: config.data
+                data: config.data,
+                methods: config.methods
             });
 
             //insert into target element
@@ -38,11 +48,12 @@
             vm.$appendTo(config.target);
 
 
-            vm.config = config;
-            vm.open = open;
-            vm.close = close;
-            vm.destroy = destroy;
-            vm.update = update;
+            modal.vm = vm;
+            modal.config = config;
+            modal.open = open;
+            modal.close = close;
+            modal.destroy = destroy;
+            modal.update = update;
 
             /**
              * open the modal
@@ -56,7 +67,7 @@
              */
             function close() {
                 vm.show = false;
-                if (vm.config.autoDestroy) {
+                if (modal.config.autoDestroy) {
                     setTimeout(destroy, 300);
                 }
             }
@@ -79,10 +90,12 @@
              * @param data
              */
             function update(data) {
-                extend(vm, data);
+                for(key in data) {
+                    vm[key] = data[key];
+                }
             }
 
-            return vm;
+            return modal;
         }
     }
 
