@@ -69,7 +69,7 @@ modal.open();
 modal.close();
 ```
 
-####destroy
+#### destroy
 ```javascript
 modal.destroy();
 ```
