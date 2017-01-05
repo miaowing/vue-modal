@@ -81,5 +81,5 @@ modal.udpate({
 })
 ```
 
-####demo
-http://demo.zfeng.net/vue-modal/index.html
+#### demo 
+https://miaowing.me/vue-modal/example/index.html
